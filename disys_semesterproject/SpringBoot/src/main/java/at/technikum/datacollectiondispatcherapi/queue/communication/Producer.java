@@ -1,4 +1,4 @@
-package at.technikum.communication;
+package at.technikum.datacollectiondispatcherapi.queue.communication;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQPrefetchPolicy;
@@ -6,9 +6,9 @@ import org.apache.activemq.ActiveMQPrefetchPolicy;
 import javax.jms.*;
 
 public class Producer {
+
     public static void send(String text, String queueName, String brokerUrl) {
         // taken from: https://activemq.apache.org/hello-world
-
         try {
             ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(brokerUrl);
 
