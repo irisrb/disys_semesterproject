@@ -42,6 +42,8 @@ public class StationDataCollectorService extends BaseService {
         String customerid = jo.get("customerid").toString();
 
         JSONObject chargingData = new JSONObject();
+        chargingData.put("requestid", jo.get("requestid").toString());
+
 //        String jobId = UUID.randomUUID().toString();
 
         try (Connection conn = connect()) {
@@ -69,8 +71,8 @@ public class StationDataCollectorService extends BaseService {
 
         try {
             Random r = new Random();
-            int low = 3000;
-            int high = 5000;
+            int low = 6000;
+            int high = 7000;
             int result = r.nextInt(high-low) + low;
 
             Thread.sleep(result);

@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONObject;
 
@@ -24,14 +25,15 @@ public class DataCollectionDispatcherController {
 
         System.out.println("customer data received");
         JSONObject stationDataCollection = new JSONObject();
+        stationDataCollection.put("requestid", UUID.randomUUID().toString());
         stationDataCollection.put("customerid", customerid);
         stationDataCollection = readAll(stationDataCollection);
 
         String sendJson = stationDataCollection.toString();
         System.out.println("data is: " + sendJson);
 
-        Producer.send(sendJson, "STATIONDATACOLLECTOR", BROKER_URL);
         Producer.send(sendJson, "DATACOLLECTIONDISPATCHER", BROKER_URL);
+        Producer.send(sendJson, "STATIONDATACOLLECTOR", BROKER_URL);
 
         return sendJson;
     }
