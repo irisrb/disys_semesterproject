@@ -15,6 +15,7 @@ CREATE TABLE public.customer (
 	address varchar(150) NULL,
 	zip int4 NULL,
 	city varchar(50) NULL,
+	country varchar(100)
 	CONSTRAINT customer_pkey PRIMARY KEY (id)
 );
 
@@ -27,16 +28,16 @@ CREATE TABLE public.charging (
 	CONSTRAINT charging_pkey PRIMARY KEY (id)
 );
 
-insert into customer (Firstname, Lastname, Address, ZIP, City) VALUES ('Tom','Turbo','Hauptstraße 1',4330,'Düsenbach');
-insert into customer (Firstname, Lastname, Address, ZIP, City) VALUES ('Franz','Muster','Am Bach 5',4190,'Hasendorf');
-insert into customer (Firstname, Lastname, Address, ZIP, City) VALUES ('Susi','Huber','Kirchenplatz 2',2140,'Altenhofen');
+insert into customer (Firstname, Lastname, Address, ZIP, City, Country) VALUES ('Tom','Turbo','Hauptstraße 1',4330,'Düsenbach','Österreich');
+insert into customer (Firstname, Lastname, Address, ZIP, City, Country) VALUES ('Franz','Muster','Am Bach 5',4190,'Hasendorf','Österreich');
+insert into customer (Firstname, Lastname, Address, ZIP, City, Country) VALUES ('Susi','Huber','Kirchenplatz 2',2140,'Altenhofen','Schweiz');
 
 select * from customer c ;
 
 insert into station (available) VALUES (TRUE);
 insert into station (available) VALUES (TRUE);
 insert into station (available) VALUES (TRUE);
-insert into station (available) VALUES (FALSE);
+insert into station (available) VALUES (TRUE);
 
 select * from station;
 
