@@ -25,8 +25,8 @@ public class InvoiceController {
     //@FXML
     //private TextField drinkInput;
 
-    //@FXML
-    //private ListView<String> orderList;
+    @FXML
+    private ListView<String> invoiceList;
 
     @FXML
     private void createInvoice() throws URISyntaxException, IOException, InterruptedException {
@@ -47,7 +47,7 @@ public class InvoiceController {
 
     }
 
-    /*@FXML
+    @FXML
     private void updateList() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(API))
@@ -68,6 +68,6 @@ public class InvoiceController {
             orders.add(jsonObject.toString());
         }
 
-        orderList.setItems(orders);
-    }*/
+        invoiceList.setItems(orders);
+    }
 }

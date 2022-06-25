@@ -5,32 +5,46 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane prefHeight="92.0"
-          prefWidth="267.0"
-          alignment="center"
-          hgap="10"
-          vgap="10"
-          xmlns="http://javafx.com/javafx/11.0.1"
-          xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="at.technikum.javafx.InvoiceController">
+<AnchorPane   prefHeight="92.0"
+              prefWidth="267.0"
+              xmlns="http://javafx.com/javafx/11.0.1"
+              xmlns:fx="http://javafx.com/fxml/1"
+              fx:controller="at.technikum.javafx.InvoiceController">
+    <children>
+        <SplitPane dividerPositions="0.5" prefHeight="400.0" prefWidth="600.0">
+            <items>
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Text text="Enter Customer-ID"
+                              GridPane.columnIndex="0"
+                              GridPane.rowIndex="0"
+                              GridPane.columnSpan="2"/>
 
-    <Text text="Enter Customer-ID"
-          GridPane.columnIndex="0"
-          GridPane.rowIndex="0"
-          GridPane.columnSpan="2"/>
+                        <Label text="Customer-ID:"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="1"/>
 
-    <Label text="Customer-ID:"
-           GridPane.columnIndex="0"
-           GridPane.rowIndex="1"/>
+                        <TextField
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="1"
+                                fx:id="customerID"/>
 
-    <TextField
-            GridPane.columnIndex="1"
-            GridPane.rowIndex="1"
-            fx:id="customerID"/>
+                        <Button text="Generate"
+                                GridPane.columnIndex="1"
+                                GridPane.rowIndex="2"
+                                onAction="#createInvoice"/>
+                    </children>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="298.0" text="Update" onAction="#updateList" />
+                        <ListView prefHeight="372.0" prefWidth="297.0" fx:id="invoiceList" />
+                    </children>
+                </VBox>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
 
-    <Button text="Generate"
-            GridPane.columnIndex="1"
-            GridPane.rowIndex="2"
-            onAction="#createInvoice"/>
 
-</GridPane>
+
