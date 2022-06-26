@@ -15,7 +15,7 @@ CREATE TABLE public.customer (
 	address varchar(150) NULL,
 	zip int4 NULL,
 	city varchar(50) NULL,
-	country varchar(100)
+	country varchar(100),
 	CONSTRAINT customer_pkey PRIMARY KEY (id)
 );
 
