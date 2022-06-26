@@ -27,8 +27,12 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 public class PdfGeneratorService extends BaseService {
 
     private final String id;
-    public static final String LOREM_IPSUM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
+    public static final String HEADER = "Ausstellungsdatum: " + new Date();
+
+    public static final String COMPANYADDRESS = "Teststreet 123" + "\n1010 Vienna";
+
+    public static final String FOOTER = "UID 123456789, ECars Ltd" + "\ninvoice incl 20% VAT";
 
     private static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/dist?user=distuser&password=distpw";
 
@@ -40,105 +44,107 @@ public class PdfGeneratorService extends BaseService {
         System.out.println("PdfGeneratorService Worker (" + this.id + ") started...");
     }
 
-//    @Override
-//    protected String executeInternal(String input) {
-//
-//        JSONObject jo = new JSONObject(input);
-//
-//        // declare variables
-//        String customerid = jo.get("customerid").toString(); // wird das überhaupt benötigt?
-//        String firstname = "";
-//        String lastname = "";
-//        String address = "";
-//        String zip = "";
-//        String city = "";
-//        String country = "";
-//        String myCustomerData = "";
-//
-//        String kwh = "";
-//        String chargingdate = "";
-//        String stationid = "";
-//        String myStationIds = "";
-//
-//        Object valueChargingData = jo.get("chargingData");
-//        JSONArray arrChargingData = ((JSONArray) valueChargingData);
-//        for (int i = 0; i < arrChargingData.length(); i ++){
-//            myStationIds = myStationIds + arrChargingData.getJSONObject(i).get("stationid").toString() + ",";
-//        }
-//
-//        // CustomerData ist redundant ? kann man die Daten könnte man auch von DB Abfragen
-//        Object valueCustomerData = jo.get("customerData");
-//        JSONArray arrCustomerData = ((JSONArray) valueCustomerData);
-//        for (int i = 0; i < arrCustomerData.length(); i ++){
-//            myCustomerData = myCustomerData + arrCustomerData.getJSONObject(i).toString() + ",";
-//        }
-//
-//        // instanctiate variables
-//        String filename = new Date().getTime()+"_"+customerid+".pdf";
-//        firstname = assertEquals
-//
-//        PdfWriter writer = new PdfWriter(filename);
-//        PdfDocument pdf = new PdfDocument(writer);
-//        Document document = new Document(pdf);
-//
-//        return jo.toString();
-//    }
-
-        @Override
-        protected String executeInternal(String input) {
+    @Override
+    protected String executeInternal(String input) {
 
         JSONObject jo = new JSONObject(input);
 
-        // declare variables
-        String customerid = jo.get("customerid").toString(); // wird das überhaupt benötigt?
-
-        String kwh = "";
-        String chargingdate = "";
-        String stationid = "";
-        String myStationIds = "";
-
-        Object valueChargingData = jo.get("chargingData");
-        JSONArray arrChargingData = ((JSONArray) valueChargingData);
-        for (int i = 0; i < arrChargingData.length(); i ++){
-            myStationIds = myStationIds + arrChargingData.getJSONObject(i).get("stationid").toString() + ",";
-        }
-
-        // CustomerData ist redundant ? kann man die Daten könnte man auch von DB Abfragen
-        Object valueCustomerData = jo.get("customerData");
-        JSONArray arrCustomerData = ((JSONArray) valueCustomerData);
-
-        try {
-            String firstname = Array.get(arrCustomerData, 2);
-            String lastname = Array.get(arrCustomerData, 5);
-            String address = Array.get(arrCustomerData, 3);
-            String zip = Array.get(arrCustomerData, 0);
-            String city = Array.get(arrCustomerData, 4);
-            String country = Array.get(arrCustomerData, 1);
-        } catch (Exception e) {
-            // throws Exception
-            System.out.println("Exception : " + e);
-        }
-
-
-        // instanctiate variables
-        String filename = new Date().getTime()+"_"+customerid+".pdf";
-        firstname = assertEquals
+        String filename = new Date().getTime()+"_invoice.pdf"; // Date Time format könnte angepasst werden
 
         PdfWriter writer = new PdfWriter(filename);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        Paragraph header = new Paragraph("Invoice DISYS")
+        document.add(new Paragraph(HEADER));
+
+        Paragraph companyName = new Paragraph("ECars Ltd")
                 .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
                 .setFontSize(14)
+                .setBold()
+                .setFontColor(ColorConstants.BLUE);
+        document.add(companyName);
+
+        document.add(new Paragraph(COMPANYADDRESS));
+
+        Paragraph title = new Paragraph("Invoice")
+                .setFontSize(18)
                 .setBold();
-        document.add(header);
-        document.add(new Paragraph(LOREM_IPSUM_TEXT));
+        document.add(title);
+
+        Paragraph customerDataTitle = new Paragraph("Customer Data")
+                .setFontSize(14)
+                .setBold()
+                .setFontColor(ColorConstants.BLUE);
+        document.add(customerDataTitle);
+
+        Object objCustomerData = jo.get("customerData");
+        String customer = String.valueOf(objCustomerData);
+
+//        remove char from string for later use
+        customer = customer.replace("\"", "").replace("[{","").replace("}]","");
+        String[] words = customer.split(",");
+
+//      customer variables
+        String firstname_text = words[2].substring(10);
+        String lastname_text = words[5].substring(9);
+        String zip_text = words[0].substring(4);
+        String country_text = words[1].substring(8);
+        String city_text = words[4].substring(5);
+        String address_text = words[3].substring(8);
+
+
+        Paragraph firstname = new Paragraph("Firstname:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(firstname);
+        document.add(new Paragraph(firstname_text));
+
+        Paragraph lastname = new Paragraph("Lastname:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(lastname);
+        document.add(new Paragraph(lastname_text));
+
+        Paragraph address = new Paragraph("Address:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(address);
+        document.add(new Paragraph(address_text));
+
+        Paragraph zip = new Paragraph("Zip:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(zip);
+        document.add(new Paragraph(zip_text));
+
+        Paragraph city = new Paragraph("City:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(city);
+        document.add(new Paragraph(city_text));
+
+        Paragraph country = new Paragraph("Country:")
+                .setFontSize(12)
+                .setBold()
+                .setFontColor(ColorConstants.GRAY);
+        document.add(country);
+        document.add(new Paragraph(country_text));
+
+//        Charging Data table
+        Paragraph chargingDataTitle = new Paragraph("Charging Data")
+                .setFontSize(14)
+                .setBold()
+                .setFontColor(ColorConstants.BLUE);
+        document.add(chargingDataTitle);
+
+        document.add(new Paragraph(FOOTER));
 
         document.close();
-
-
-        return jo.toString();
     }
 
     private Connection connect() throws SQLException {
