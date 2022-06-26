@@ -10,7 +10,8 @@ public class Main {
         DataCollectionReceiverService DataCollectionReceiverService = new DataCollectionReceiverService(
                 "DATACOLLECTIONDISPATCHER"
                 , "DATACOLLECTIONRECEIVER"
-                , "PDFGENERATOR", BROKER_URL);
+                , "PDFGENERATOR"
+                , BROKER_URL);
         DataCollectionReceiverService.run();
 
     }

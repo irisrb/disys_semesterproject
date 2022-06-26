@@ -1,6 +1,5 @@
 package at.technikum.service;
 
-
 import at.technikum.communication.Consumer;
 import at.technikum.communication.Producer;
 

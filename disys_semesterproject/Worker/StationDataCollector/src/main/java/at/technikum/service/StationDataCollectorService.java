@@ -71,10 +71,10 @@ public class StationDataCollectorService extends BaseService {
 
         try {
             Random r = new Random();
-            int low = 6000;
-            int high = 7000;
+            int low = 8000;
+            int high = 10000;
             int result = r.nextInt(high-low) + low;
-
+            System.out.println("Sleep for " + result + "ms");
             Thread.sleep(result);
         } catch (InterruptedException e) {
             return "error";
