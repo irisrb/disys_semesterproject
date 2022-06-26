@@ -80,7 +80,7 @@ public class PdfGeneratorService extends BaseService {
         Object objCustomerData = jo.get("customerData");
         String customer = String.valueOf(objCustomerData);
 
-//        remove char from string for later use
+//        remove char from string, makes substring easier
         customer = customer.replace("\"", "").replace("[{","").replace("}]","");
         String[] words = customer.split(",");
 
@@ -135,12 +135,51 @@ public class PdfGeneratorService extends BaseService {
         document.add(country);
         document.add(new Paragraph(country_text));
 
-//        Charging Data table
+//       chargingData Object
+        Object objChargingData = jo.get("chargingData");
+        JSONArray arrChargingData = (JSONArray) objChargingData;
+        String[] str = new String[arrChargingData.length()]; //helper array to seperate chargingData
+        double kWhCost = 0.32;
+        double kWhSum = 0;
+
+//        Charging Data Table
         Paragraph chargingDataTitle = new Paragraph("Charging Data")
                 .setFontSize(14)
                 .setBold()
                 .setFontColor(ColorConstants.BLUE);
         document.add(chargingDataTitle);
+
+        Table chargingDataTable = new Table(UnitValue.createPercentArray(4)).useAllAvailableWidth();
+        chargingDataTable.addHeaderCell(getHeaderCell("Date"));
+        chargingDataTable.addHeaderCell(getHeaderCell("kWh"));
+        chargingDataTable.addHeaderCell(getHeaderCell("StationID"));
+        chargingDataTable.addHeaderCell(getHeaderCell("Cost [per kWh]"));
+        chargingDataTable.setFontSize(12).setBackgroundColor(ColorConstants.WHITE);
+
+        for (int i=0; i < arrChargingData.length(); i++){
+            str[i] = String.valueOf(arrChargingData.get(i));
+            str[i] = str[i].replace("\"", "").replace("{","").replace("}","");
+            String[] str2 = str[i].split(",");
+
+            chargingDataTable.addCell(str2[0].toString().substring(13));
+            chargingDataTable.addCell(str2[1].toString().substring(4)+" kWh");
+            chargingDataTable.addCell(str2[2].toString().substring(10));
+            chargingDataTable.addCell(String.valueOf(kWhCost * Double.parseDouble(str2[1].substring(4)))+" €");
+
+            kWhSum += (kWhCost * Double.parseDouble(str2[1].substring(4)));// helper, saving values
+        }
+        document.add(chargingDataTable);
+
+//        Table for Sums
+        Table costSumTable = new Table(UnitValue.createPercentArray(4)).useAllAvailableWidth();
+        costSumTable.addHeaderCell(getHeaderCell("Sum"));
+        costSumTable.addHeaderCell(getHeaderCell(String.valueOf(kWhSum/kWhCost)+" kWh"));
+        costSumTable.addHeaderCell(getHeaderCell(""));
+        costSumTable.addHeaderCell(String.valueOf(kWhSum)+" €");
+        costSumTable.setFontSize(12)
+                .setBold()
+                .setBackgroundColor(ColorConstants.GRAY);
+        document.add(costSumTable);
 
         document.add(new Paragraph(FOOTER));
 
